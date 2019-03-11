@@ -15,37 +15,32 @@
  */
 package app.harshit.emotiondetection
 
-
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
 import android.media.Image
 import android.media.ImageReader
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.app.AppCompatActivity
+import android.util.Base64
 import android.util.Log
+import android.view.KeyEvent
+import android.view.View
+import android.view.View.GONE
+import android.widget.Toast
+import com.google.android.things.contrib.driver.button.ButtonInputDriver
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.bottom_sheet.*
 import okhttp3.*
 import okhttp3.Request
 import java.io.IOException
-import android.graphics.drawable.BitmapDrawable
-import android.util.Base64
-import android.view.KeyEvent
-import com.google.android.things.contrib.driver.button.ButtonInputDriver
-import android.view.View
-import android.graphics.Bitmap
-import android.net.ConnectivityManager
-import android.opengl.ETC1.getHeight
-import android.opengl.ETC1.getWidth
-import android.support.design.widget.BottomSheetBehavior
-import android.view.View.GONE
-import android.widget.Toast
-import kotlinx.android.synthetic.main.bottom_sheet.*
-import java.lang.IndexOutOfBoundsException
 
 
 class MainActivity : AppCompatActivity() {
@@ -132,8 +127,10 @@ class MainActivity : AppCompatActivity() {
         }
         if (isNetwork(this))
             getFacesOkHttp(Base64.encodeToString(bytes, Base64.DEFAULT), image)
-        else
+        else {
             Toast.makeText(this, "No network detected!", Toast.LENGTH_SHORT).show()
+            progress.visibility = GONE
+        }
     }
 
     private fun getFacesOkHttp(base64EncodedImage: String, image: Image) {
