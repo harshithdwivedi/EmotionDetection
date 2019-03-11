@@ -42,6 +42,7 @@ import android.net.ConnectivityManager
 import android.opengl.ETC1.getHeight
 import android.opengl.ETC1.getWidth
 import android.support.design.widget.BottomSheetBehavior
+import android.view.View.GONE
 import android.widget.Toast
 import kotlinx.android.synthetic.main.bottom_sheet.*
 import java.lang.IndexOutOfBoundsException
@@ -49,7 +50,7 @@ import java.lang.IndexOutOfBoundsException
 
 class MainActivity : AppCompatActivity() {
 
-    val API_KEY = "AIzaSyB6ViM9lAH5s772Gep0e1VJ26e7hhDMa9A"
+    private val API_KEY = "AIzaSyB6ViM9lAH5s772Gep0e1VJ26e7hhDMa9A"
 
     var isDetecting = false
 
@@ -69,16 +70,6 @@ class MainActivity : AppCompatActivity() {
      * An additional thread for running Camera tasks that shouldn't block the UI.
      */
     private var mCameraThread: HandlerThread? = null
-
-    /**
-     * A [Handler] for running Cloud tasks in the background.
-     */
-    private var mCloudHandler: Handler? = null
-
-    /**
-     * An additional thread for running Cloud tasks that shouldn't block the UI.
-     */
-    private var mCloudThread: HandlerThread? = null
 
     lateinit var originalBitmapImage: Bitmap
 
@@ -114,11 +105,7 @@ class MainActivity : AppCompatActivity() {
         mCameraThread!!.start()
         mCameraHandler = Handler(mCameraThread!!.looper)
 
-        mCloudThread = HandlerThread("CloudThread")
-        mCloudThread!!.start()
-        mCloudHandler = Handler(mCloudThread!!.looper)
-
-        // Initialize the doorbell button driver
+        // Initialize the button driver
         initPIO()
 
         // Camera code is complicated, so we've shoved it all in this closet class for you.
@@ -173,7 +160,6 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call, response: Response) {
                 val result = response.body()?.string()
                 val faceDetectionResponse = gson.fromJson(result, FaceDetectionResponse::class.java)
-                Log.e("TAG", "onResponse : $result")
 
                 //Draw a rectangle around the faces
                 //http://joerg-richter.fuyosoft.com/?p=120
@@ -242,9 +228,7 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mCamera!!.shutDown()
-
         mCameraThread!!.quitSafely()
-        mCloudThread!!.quitSafely()
         try {
             mButtonInputDriver!!.close()
         } catch (e: IOException) {
@@ -255,7 +239,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_ENTER) {
-            // Doorbell rang!
+            tvAbout.visibility = GONE
             Log.d(TAG, "button pressed")
             if (!isDetecting) {
                 mCamera!!.takePicture()
@@ -272,7 +256,7 @@ class MainActivity : AppCompatActivity() {
         private val TAG = "MainActivity"
     }
 
-    fun isNetwork(context: Context): Boolean {
+    private fun isNetwork(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetworkInfo = connectivityManager.activeNetworkInfo
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
