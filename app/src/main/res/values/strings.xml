@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">EmotionDetection</string>
+    <string name="detectedEmotions">Detected Emotions</string>
+</resources>
