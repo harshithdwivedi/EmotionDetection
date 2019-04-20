@@ -1,35 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/rootLayout"
-        android:orientation="vertical">
-
-    <TextView
-            android:id="@+id/tvAbout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#fff"
-            android:gravity="center"
-            android:textSize="32sp"
-            android:text="Emotion Detection\nPlace the Camera in front of your face and press the button to get started!"/>
-
-    <ImageView
-            android:id="@+id/ivPreview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"/>
-
-    <ProgressBar
-            android:visibility="gone"
-            android:id="@+id/progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
-
-    <include
-            android:id="@+id/bottomLayout"
-            layout="@layout/bottom_sheet" />
-
-</android.support.design.widget.CoordinatorLayout>
+        android:layout_height="match_parent" android:id="@+id/container"/>
