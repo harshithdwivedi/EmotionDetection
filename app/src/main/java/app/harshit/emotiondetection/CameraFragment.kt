@@ -177,6 +177,11 @@ class CameraFragment : Fragment() {
     private var sensorOrientation = 0
 
     /**
+     * OkHttpClient
+     */
+    val client = OkHttpClient.Builder().build()
+
+    /**
      * A [CameraCaptureSession.CaptureCallback] that handles events related to JPEG capture.
      */
     private val captureCallback = object : CameraCaptureSession.CaptureCallback() {
@@ -282,11 +287,9 @@ class CameraFragment : Fragment() {
             Toast.makeText(requireContext(), "No network detected!", Toast.LENGTH_SHORT).show()
             progress.visibility = View.GONE
         }
-        unlockFocus()
     }
 
     private fun getFacesOkHttp(base64EncodedImage: String, bitmap: Bitmap) {
-        val client = OkHttpClient.Builder().build()
 
         val requestImage = RequestImage(base64EncodedImage)
         val requestObject = FaceDetectionRequest(arrayListOf(Request(requestImage)))
@@ -399,7 +402,7 @@ class CameraFragment : Fragment() {
     }
 
 
-//    TODO : Debug lockFocus() being called twice
+    //    TODO : Debug lockFocus() being called twice
     fun onKeyUp(keyCode: Int) {
         if (keyCode == KeyEvent.KEYCODE_ENTER) {
             when (detectStatus) {
@@ -684,7 +687,7 @@ class CameraFragment : Fragment() {
      * [.captureCallback] from both [.lockFocus].
      */
     private fun captureStillPicture() {
-        Log.e(TAG,"Campture Still picture")
+        Log.e(TAG, "Campture Still picture")
         try {
             if (activity == null || cameraDevice == null) return
             val rotation = activity!!.windowManager.defaultDisplay.rotation
@@ -717,6 +720,7 @@ class CameraFragment : Fragment() {
                     )
                     PixelCopy.request(surfaceView, bitmap, {
                         getEmotions(bitmap)
+                        unlockFocus()
                     }, backgroundHandler!!)
                 }
             }

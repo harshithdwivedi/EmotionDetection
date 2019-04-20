@@ -32,3 +32,4 @@ import android.widget.Toast
 fun FragmentActivity.showToast(text: String) {
     runOnUiThread { Toast.makeText(this, text, Toast.LENGTH_SHORT).show() }
 }
+
