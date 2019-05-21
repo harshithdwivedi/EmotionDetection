@@ -267,17 +267,8 @@ class CameraFragment : Fragment() {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 
-    //TODO : Bad hack, change this later
-    private var count = 0
 
     private fun getEmotions(bitmap: Bitmap) {
-
-        if (count == 0) {
-            count++
-            return
-        } else {
-            count = 0
-        }
 
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
@@ -696,7 +687,16 @@ class CameraFragment : Fragment() {
      * Capture a still picture. This method should be called when we get a response in
      * [.captureCallback] from both [.lockFocus].
      */
+    //TODO : Bad hack, change this later
+    private var count = 0
+
     private fun captureStillPicture() {
+        if (count == 0) {
+            count++
+            return
+        } else {
+            count = 0
+        }
         Log.e(TAG, "Campture Still picture")
         try {
             if (activity == null || cameraDevice == null) return
