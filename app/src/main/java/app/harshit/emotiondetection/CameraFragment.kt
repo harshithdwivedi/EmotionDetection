@@ -267,7 +267,17 @@ class CameraFragment : Fragment() {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 
+    //TODO : Bad hack, change this later
+    private var count = 0
+
     private fun getEmotions(bitmap: Bitmap) {
+
+        if (count == 0) {
+            count++
+            return
+        } else {
+            count = 0
+        }
 
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
